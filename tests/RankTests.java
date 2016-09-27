@@ -36,14 +36,14 @@ public class RankTests {
     public void detectConsecutiveRanks()
     {
         // consecutive
-        Assert.assertTrue("Failed to detect consecutive values with no values.", Rank.areConsecutive());
-        Assert.assertTrue("Failed to detect consecutive values with a single value.", Rank.areConsecutive(Rank.A));
-        Assert.assertTrue("Failed to detect consecutive values with all ranks in ascending order.", Rank.areConsecutive(Rank.A, Rank.TWO, Rank.THREE, Rank.FOUR, Rank.FIVE, Rank.SIX, Rank.SEVEN, Rank.EIGHT, Rank.NINE, Rank.TEN, Rank.JACK, Rank.QUEEN, Rank.KING));
-        Assert.assertTrue("Failed to detect consecutive values with all ranks in ascending order.", Rank.areConsecutive(Rank.KING, Rank.QUEEN, Rank.JACK, Rank.TEN, Rank.NINE, Rank.EIGHT, Rank.SEVEN, Rank.SIX, Rank.FIVE, Rank.FOUR, Rank.THREE, Rank.TWO, Rank.A));
+        Assert.assertTrue("Failed to detect consecutive values with no values.", Rank.areConsecutive(new Rank[0]));
+        Assert.assertTrue("Failed to detect consecutive values with a single value.", Rank.areConsecutive(new Rank[] { Rank.A }));
+        Assert.assertTrue("Failed to detect consecutive values with all ranks in ascending order.", Rank.areConsecutive(new Rank[] { Rank.A, Rank.TWO, Rank.THREE, Rank.FOUR, Rank.FIVE, Rank.SIX, Rank.SEVEN, Rank.EIGHT, Rank.NINE, Rank.TEN, Rank.JACK, Rank.QUEEN, Rank.KING }));
+        Assert.assertTrue("Failed to detect consecutive values with all ranks in ascending order.", Rank.areConsecutive(new Rank[] { Rank.KING, Rank.QUEEN, Rank.JACK, Rank.TEN, Rank.NINE, Rank.EIGHT, Rank.SEVEN, Rank.SIX, Rank.FIVE, Rank.FOUR, Rank.THREE, Rank.TWO, Rank.A }));
 
         // not consecutive
-        Assert.assertFalse("Incorrectly detected consecutive values between Ace and King.", Rank.areConsecutive(Rank.A, Rank.KING));
-        Assert.assertFalse("Incorrectly detected consecutive values for a list of ranks that begins consecutively.", Rank.areConsecutive(Rank.A, Rank.TWO, Rank.THREE, Rank.FIVE));
-        Assert.assertFalse("Incorrectly detected consecutive values for a list of ranks that ends consecutively.", Rank.areConsecutive(Rank.A, Rank.THREE, Rank.FOUR, Rank.FIVE));
+        Assert.assertFalse("Incorrectly detected consecutive values between Ace and King.", Rank.areConsecutive(new Rank[] { Rank.A, Rank.KING }));
+        Assert.assertFalse("Incorrectly detected consecutive values for a list of ranks that begins consecutively.", Rank.areConsecutive(new Rank[] { Rank.A, Rank.TWO, Rank.THREE, Rank.FIVE}));
+        Assert.assertFalse("Incorrectly detected consecutive values for a list of ranks that ends consecutively.", Rank.areConsecutive(new Rank[] { Rank.A, Rank.THREE, Rank.FOUR, Rank.FIVE }));
     }
 }

@@ -1,8 +1,4 @@
-package com.jplamondonw.jpoker;
-
-import com.jplamondonw.jpoker.models.Card;
-import com.jplamondonw.jpoker.models.Rank;
-import com.jplamondonw.jpoker.models.Suit;
+package com.jplamondonw.jpoker.models;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -89,7 +85,6 @@ public class HandData {
         {
             List<Integer> values = new ArrayList<>(ranks.values());
             values.sort((a, b) -> b - a); // sort in descending order
-            System.out.println(values);
 
             int size = values.size();
             this.rankCounts = new int[size];

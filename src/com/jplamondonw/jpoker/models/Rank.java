@@ -57,7 +57,7 @@ public enum Rank {
      * Get whether the given ranks are consecutive in the given order.
      * @param ranks The ranks to check.
      */
-    public static boolean areConsecutive(Rank... ranks)
+    public static boolean areConsecutive(Rank[] ranks)
     {
         for(int i = 0; i < ranks.length - 1; i++)
         {

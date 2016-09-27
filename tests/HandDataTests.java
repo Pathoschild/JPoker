@@ -1,4 +1,4 @@
-import com.jplamondonw.jpoker.HandData;
+import com.jplamondonw.jpoker.models.HandData;
 import com.jplamondonw.jpoker.models.Card;
 import com.jplamondonw.jpoker.models.Rank;
 import com.jplamondonw.jpoker.models.Suit;
