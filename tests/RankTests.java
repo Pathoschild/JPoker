@@ -1,3 +1,4 @@
+import com.jplamondonw.jpoker.models.Constants;
 import com.jplamondonw.jpoker.models.Rank;
 import org.junit.Assert;
 import org.junit.Test;
@@ -26,6 +27,21 @@ public class RankTests {
 
             symbols.put(rank.symbol, true);
             values.put(rank.value, true);
+        }
+    }
+
+    /**
+     * Assert that rank layouts match the correct size.
+     */
+    @Test
+    public void layoutsAreValid()
+    {
+        for(Rank rank : Rank.values())
+        {
+            String[] layout = rank.layout.split("\n");
+            Assert.assertEquals("Rank " + rank.symbol + " has an invalid card layout height.", Constants.CARD_LAYOUT_HEIGHT, layout.length);
+            for(int i = 0; i < layout.length; i++)
+                Assert.assertEquals("Rank " + rank.symbol + " has an invalid card layout width on line " + i + 1 + ".", Constants.CARD_LAYOUT_WIDTH, layout[i].length());
         }
     }
 

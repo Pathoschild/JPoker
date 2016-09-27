@@ -107,6 +107,28 @@ public class Hand {
         return this.getMetadata().totalValue;
     }
 
+    /**
+     * Get the layout representing the card.
+     * @return Returns each line of the card layout.
+     */
+    public String[] getLayout()
+    {
+        // initialise lines
+        List<String> layout = new ArrayList<>();
+        for(int i = 0; i < Constants.CARD_LAYOUT_HEIGHT + Constants.CARD_BORDER_WIDTH; i++)
+            layout.add("");
+
+        // add card layouts
+        int cardHeight = Constants.CARD_LAYOUT_HEIGHT + Constants.CARD_BORDER_WIDTH;
+        for(Card card : cards)
+        {
+            String[] cardLayout = card.getLayout();
+            for(int i = 0; i < cardLayout.length && i < cardHeight; i++)
+                layout.set(i, layout.get(i) + cardLayout[i]);
+        }
+        return layout.toArray(new String[0]);
+    }
+
 
     // Private methods
     //******************************

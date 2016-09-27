@@ -2,6 +2,7 @@ package com.jplamondonw.jpoker;
 
 import com.jplamondonw.jpoker.models.Card;
 import com.jplamondonw.jpoker.models.Deck;
+import com.jplamondonw.jpoker.models.Hand;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -34,11 +35,18 @@ public class Main {
             console.out.println("┌───────┐\n│ ♦♣ ♥♠ │\n└───────┘");
             console.out.println();
 
-            // show card deck test
-            console.out.println("Shuffled card deck");
+            // show hand test
+            console.out.println("Hand draw test");
+            console.out.println("---------------------------------");
+            Hand hand = new Hand();
+            hand.add(Arrays.asList(deck.drawCard(), deck.drawCard(), deck.drawCard(), deck.drawCard()));
+            for(String line : hand.getLayout())
+                console.out.println(line);
+
+            // show card test
+            console.out.println("Shuffled cards");
             console.out.println("---------------------------------");
             console.out.println("cards: " + deck.size());
-
             while(!deck.empty())
             {
                 Card card = deck.drawCard();
