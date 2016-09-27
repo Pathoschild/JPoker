@@ -6,6 +6,7 @@ package com.jplamondonw.jpoker.models;
 public enum Rank {
     // Constants
     //******************************
+    A     (1,  "A",  "A    \n     \n  %  \n     \n    A"),
     TWO   (2,  "2",  "2    \n  %  \n     \n  %  \n    2"),
     THREE (3,  "3",  "3    \n  %  \n  %  \n  %  \n    3"),
     FOUR  (4,  "4",  "4    \n%   %\n     \n%   %\n    4"),
@@ -17,8 +18,7 @@ public enum Rank {
     TEN   (10, "10", "10  %\n% % %\n% % %\n% % %\n   10"),
     JACK  (11, "J",  "J    \n     \nJACK \n     \n    J"),
     QUEEN (12, "Q",  "Q    \n     \nQUEEN\n     \n    Q"),
-    KING  (13, "K",  "K    \n     \nKING \n     \n    K"),
-    A     (14, "A",  "A    \n     \n  %  \n     \n    A");
+    KING  (13, "K",  "K    \n     \nKING \n     \n    K");
 
 
     // Properties
