@@ -16,9 +16,9 @@ public enum Rank {
     EIGHT (8,  "8",  "8    \n% % %\n%   %\n% % %\n    8"),
     NINE  (9,  "9",  "9    \n% % %\n% % %\n% % %\n    9"),
     TEN   (10, "10", "10  %\n% % %\n% % %\n% % %\n   10"),
-    JACK  (11, "J",  "J    \n     \nJACK \n     \n    J"),
-    QUEEN (12, "Q",  "Q    \n     \nQUEEN\n     \n    Q"),
-    KING  (13, "K",  "K    \n     \nKING \n     \n    K");
+    JACK  (11, "J",  "J    \n%    \nJACK \n    %\n    J"),
+    QUEEN (12, "Q",  "Q    \n%    \nQUEEN\n    %\n    Q"),
+    KING  (13, "K",  "K    \n%    \nKING \n    %\n    K");
 
 
     // Properties
