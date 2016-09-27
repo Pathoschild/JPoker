@@ -24,7 +24,6 @@ public class Main {
 
         // set up cards
         Deck deck = new Deck();
-        deck.shuffle();
 
         // run console tests
         if(Arrays.asList(args).contains("test"))

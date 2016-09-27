@@ -28,6 +28,9 @@ public class Deck {
             for(Suit suit : Suit.values())
                 this.cards.add(new Card(suit, rank));
         }
+
+        // shuffle deck
+        Collections.shuffle(this.cards);
     }
 
     /**
@@ -44,14 +47,6 @@ public class Deck {
     public boolean empty()
     {
         return this.cards.empty();
-    }
-
-    /**
-     * Shuffle the cards in the deck.
-     */
-    public void shuffle()
-    {
-        Collections.shuffle(this.cards);
     }
 
     /**
