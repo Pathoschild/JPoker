@@ -1,5 +1,8 @@
 package com.jplamondonw.jpoker;
 
+import com.jplamondonw.jpoker.models.Card;
+import com.jplamondonw.jpoker.models.Deck;
+
 import java.io.IOException;
 import java.util.Arrays;
 
@@ -19,11 +22,32 @@ public class Main {
         console.initialise();
         console.clear();
 
+        // set up cards
+        Deck deck = new Deck();
+        deck.shuffle();
+
         // run console tests
         if(Arrays.asList(args).contains("test"))
         {
+            // show unicode test
+            console.out.println("Unicode test");
+            console.out.println("---------------------------------");
             console.out.println("┌───────┐\n│ ♦♣ ♥♠ │\n└───────┘");
-            console.out.println("Print test done.");
+            console.out.println();
+
+            // show card deck test
+            console.out.println("Shuffled card deck");
+            console.out.println("---------------------------------");
+            console.out.println("cards: " + deck.size());
+
+            while(!deck.empty())
+            {
+                Card card = deck.drawCard();
+                for(String line : card.getLayout())
+                    console.out.println(line);
+            }
+
+            // end game
             return;
         }
     }
