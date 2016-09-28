@@ -71,3 +71,8 @@ In a betting round:
 * https://en.wikipedia.org/wiki/Texas_hold_'em#Rules
 * http://www.wsop.com/poker-games/texas-holdem/rules/
 * http://www.izzygames.com/texas-holdem-poker-heads-up-t4278.html
+
+## Running the game from source ##
+
+1. Compile the project into a `.jar` file.
+2. Run the compiled file with `java -jar JPoker.jar` (to play) or `java -jar JPoker.jar test` (to run console tests).
