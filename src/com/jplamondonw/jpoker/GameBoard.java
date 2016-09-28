@@ -11,12 +11,12 @@ import java.util.List;
  */
 public class GameBoard implements Drawable
 {
-    // Properties
+    // Public properties
     //******************************
     /**
      * The bot player.
      */
-    public final Player bot = new Player(false, "Sir Bot", Constants.INITIAL_CHIPS);
+    public final Player bot = new Player(false, "They", Constants.INITIAL_CHIPS);
 
     /**
      * The user player.
@@ -44,6 +44,14 @@ public class GameBoard implements Drawable
     public int pot;
 
 
+    // Private properties
+    //******************************
+    /**
+     * A face-down card used to draw the pile.
+     */
+    private Card facedownCard = new Card(Suit.CLUBS, Rank.A, true);
+
+
     // Public methods
     //******************************
     /**
@@ -59,6 +67,18 @@ public class GameBoard implements Drawable
         // draw players
         this.drawPlayer(console, this.bot, origin, Constants.BoardLayout.BOT_NAME_AND_BET, Constants.BoardLayout.BOT_HAND);
         this.drawPlayer(console, this.user, origin, Constants.BoardLayout.USER_NAME_AND_BET, Constants.BoardLayout.USER_HAND);
+
+        // draw pile
+        {
+            Point position = this.getRelativePoint(origin, Constants.BoardLayout.CARD_PILE);
+            int pileSize = this.deck.size();
+            if(pileSize >= 3)
+                this.facedownCard.draw(console, position.y, position.x);
+            if(pileSize >= 2)
+                this.facedownCard.draw(console, position.y, position.x + 1);
+            if(pileSize >= 1)
+                this.facedownCard.draw(console, position.y, position.x + 2);
+        }
 
         // draw community cards
         {

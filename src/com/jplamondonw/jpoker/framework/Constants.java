@@ -68,19 +68,24 @@ public class Constants
         public static final Point BET_INFO_BOX = new Point(78, 5);
 
         /**
+         * The position at which to draw the draw pile.
+         */
+        public static final Point CARD_PILE = new Point(78, 15);
+
+        /**
          * The position at which to draw the bot's name and bet.
          */
-        public static final Point BOT_NAME_AND_BET = new Point(5, 1);
+        public static final Point BOT_NAME_AND_BET = new Point(5, 8);
 
         /**
          * The position at which to draw the bot's hand.
          */
-        public static final Point BOT_HAND = new Point(5, 2);
+        public static final Point BOT_HAND = new Point(5, 1);
 
         /**
          * The position at which to draw the community cards.
          */
-        public static final Point COMMUNITY_CARDS = new Point(5, 14);
+        public static final Point COMMUNITY_CARDS = new Point(15, 14);
 
         /**
          * The position at which to draw the user's name and bet.
