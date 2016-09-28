@@ -138,6 +138,15 @@ public class Hand implements Drawable
     }
 
     /**
+     * Show all cards in the hand.
+     */
+    public void showCards()
+    {
+        for(Card card : this.cards)
+            card.isFaceDown = false;
+    }
+
+    /**
      * Draw the element at the specified position.
      * @param console The console to which to draw.
      * @param row The top row position.

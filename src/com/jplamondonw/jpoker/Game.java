@@ -1,9 +1,6 @@
 package com.jplamondonw.jpoker;
 
-import com.jplamondonw.jpoker.framework.ConsoleHelper;
-import com.jplamondonw.jpoker.framework.Constants;
-import com.jplamondonw.jpoker.framework.Deck;
-import com.jplamondonw.jpoker.framework.Player;
+import com.jplamondonw.jpoker.framework.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,44 +50,45 @@ public class Game
     public void run() throws IOException, InterruptedException
     {
         // get references for simplicity
+        GameLog log = this.log;
         GameBoard board = this.board;
         Deck deck = this.board.deck;
         Player user = this.board.user;
         Player bot = this.board.bot;
 
         // start game
-        this.log.add("Welcome to Texas Hold'em heads-up tournament style! We'll be");
-        this.log.add("playing with a few house rules. (If you know the standard rules,");
-        this.log.add("you'll be fine.)");
+        log.add("Welcome to Texas Hold'em heads-up tournament style! We'll be");
+        log.add("playing with a few house rules. (If you know the standard rules,");
+        log.add("you'll be fine.)");
 
         // start game loop
         while(true)
         {
             // confirm game start
-            this.log.add("Ready? (y)es (n)o");
+            log.add("Ready? (y)es (n)o");
             this.draw();
             if (this.getChoice("y", "n").equals("n"))
             {
-                this.log.add("Good bye. :)");
+                log.add("Good bye. :)");
                 this.draw();
                 break;
             }
-            this.log.clear();
+            log.clear();
 
             // report initial state
-            this.log.add("You each have $" + user.chips + " in chips. We'll start the big blind at $" + this.board.bigBlind + ".");
+            log.add("You each have $" + user.chips + " in chips. We'll start the big blind at $" + this.board.bigBlind + ".");
 
             // randomly choose dealer
             this.isUserDealer = new Random().nextBoolean();
             if(this.isUserDealer)
-                this.log.add("Rolling the dice... you have the dealer coin!");
+                log.add("Rolling the dice... you have the dealer coin!");
             else
-                this.log.add("Rolling the dice... they have the dealer coin.");
+                log.add("Rolling the dice... they have the dealer coin.");
             this.draw();
 
             // place initial bets & distribute cards
-            this.log.add("Placing initial bets.");
-            this.log.add("Dealing hole cards.");
+            log.add("Placing initial bets.");
+            log.add("Dealing hole cards.");
             this.getDealer().bet(board.smallBlind);
             this.getOther().bet(board.bigBlind);
             user.hand.add(Arrays.asList(deck.drawCard(), deck.drawCard()));
@@ -105,7 +103,7 @@ public class Game
             // the flop
             if(winner == null)
             {
-                this.log.add("The flop!");
+                log.add("The flop!");
                 this.board.communityCards.add(Arrays.asList(deck.drawCard(), deck.drawCard(), deck.drawCard()));
                 winner = this.runBettingRound(board, this.board.bigBlind);
             }
@@ -113,7 +111,7 @@ public class Game
             // the turn
             if(winner == null)
             {
-                this.log.add("The turn!");
+                log.add("The turn!");
                 this.board.communityCards.add(deck.drawCard());
                 winner = this.runBettingRound(board, this.board.bigBlind);
             }
@@ -121,25 +119,67 @@ public class Game
             // the river
             if(winner == null)
             {
-                this.log.add("The river!");
+                log.add("The river!");
                 this.board.communityCards.add(deck.drawCard());
                 winner = this.runBettingRound(board, this.board.bigBlind);
             }
 
+            // showdown
+            if(winner == null)
+            {
+                log.add("Showdown!");
+                HandType botHandType = bot.hand.getHandType();
+                HandType userHandType = user.hand.getHandType();
+
+                // winning hand type
+                if(botHandType.value != userHandType.value)
+                {
+                    if(botHandType.value > userHandType.value)
+                    {
+                        log.add("They have a " + botHandType.name + "!");
+                        winner = bot;
+                    }
+                    else
+                    {
+                        log.add("You have a " + userHandType.name + "!");
+                        winner = user;
+                    }
+                }
+
+                // else highest total face value
+                else
+                {
+                    int botHandValue = bot.hand.getTotalFaceValue();
+                    int userHandValue = bot.hand.getTotalFaceValue();
+                    if(botHandValue > userHandValue)
+                    {
+                        log.add("They have the highest combined face value.");
+                        winner = bot;
+                    }
+                    else if(userHandValue > botHandValue)
+                    {
+                        log.add("You have the highest combined face value.");
+                        winner = user;
+                    }
+                }
+            }
+
             // handle winner
+            bot.showHand();
+
             int pot = user.bet + bot.bet;
             if(winner != null)
             {
                 if(winner == user)
-                    this.log.add("You won! You get $" + pot + ".");
+                    log.add("You won! You get $" + pot + ".");
                 else
-                    this.log.add("You lost! They get $" + pot + ".");
+                    log.add("You lost! They get $" + pot + ".");
                 winner.chips += pot;
             }
             else
             {
                 int winnings = pot / 2;
-                this.log.add("Looks like a tie; you each get $" + winnings + ".");
+                log.add("Looks like a tie; you each get $" + winnings + ".");
                 user.chips += winnings;
                 bot.chips += winnings;
             }
@@ -173,8 +213,9 @@ public class Game
             if(!this.isUserDealer)
                 botCanBet = this.runBotBet(bot, user, minBet);
 
-            // run player action
-            if(user.chips < minBet - (user.bet % minBet))
+            // calculate minimum player bet
+            int minPlayerBet = minBet - (user.bet % minBet);
+            if(user.chips < minPlayerBet)
             {
                 this.log.add("You don't have enough chips to bet.");
                 userCanBet = false;
@@ -267,7 +308,7 @@ public class Game
                             bet = Integer.parseInt(input);
 
                             // validate
-                            if(bet < minBet)
+                            if(bet < minPlayerBet)
                                 this.log.add("The minimum " + verb + " is $" + minBet + ".");
                             else if(bet > user.chips)
                                 this.log.add("You don't have that many chips to " + verb + ".");

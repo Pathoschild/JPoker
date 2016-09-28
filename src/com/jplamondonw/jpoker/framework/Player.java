@@ -63,4 +63,12 @@ public class Player
         this.bet += amount;
         return true;
     }
+
+    /**
+     * Show all cards in the player's hand.
+     */
+    public void showHand()
+    {
+        this.hand.showCards();
+    }
 }

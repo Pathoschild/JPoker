@@ -20,7 +20,7 @@ public class Card implements Drawable
     /**
      * Whether the card should be drawn face-down.
      */
-    public final boolean isFaceDown;
+    public boolean isFaceDown;
 
 
     // Public methods
