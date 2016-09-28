@@ -3,7 +3,8 @@ package com.jplamondonw.jpoker.framework;
 /**
  * The display and game logic for a card.
  */
-public class Card {
+public class Card implements Drawable
+{
     // Properties
     //******************************
     /**
@@ -32,15 +33,20 @@ public class Card {
     }
 
     /**
-     * Get the layout representing the card.
-     * @return Returns each line of the card layout.
+     * Draw the element at the specified position.
+     * @param console The console to which to draw.
+     * @param row The top row position.
+     * @param col The left column position.
      */
-    public String[] getLayout()
+    public void draw(ConsoleHelper console, int row, int col)
     {
-        String layout =
-            "┌───────┐\n│ "
-            + this.rank.layout.replace("%", this.suit.symbol).replace("\n", " │\n│ ")
-            + " │\n└───────┘";
-        return layout.split("\n");
+        String layout = "┌───────┐\n│ " + this.rank.layout.replace("%", this.suit.symbol).replace("\n", " │\n│ ") + " │\n└───────┘";
+        String[] lines = layout.split("\n");
+
+        for(int i = 0; i < lines.length; i++)
+        {
+            console.setCursor(row + i, col);
+            console.out.print(lines[i]);
+        }
     }
 }

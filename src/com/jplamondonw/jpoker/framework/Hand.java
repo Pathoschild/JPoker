@@ -8,7 +8,8 @@ import java.util.List;
 /**
  * A player's hand of cards.
  */
-public class Hand {
+public class Hand implements Drawable
+{
     // Properties
     //******************************
     /**
@@ -111,25 +112,19 @@ public class Hand {
     }
 
     /**
-     * Get the layout representing the card.
-     * @return Returns each line of the card layout.
+     * Draw the element at the specified position.
+     * @param console The console to which to draw.
+     * @param row The top row position.
+     * @param col The left column position.
      */
-    public String[] getLayout()
+    public void draw(ConsoleHelper console, int row, int col)
     {
-        // initialise lines
-        List<String> layout = new ArrayList<>();
-        for(int i = 0; i < Constants.CARD_LAYOUT_HEIGHT + Constants.CARD_BORDER_WIDTH; i++)
-            layout.add("");
-
-        // add card layouts
-        int cardHeight = Constants.CARD_LAYOUT_HEIGHT + Constants.CARD_BORDER_WIDTH;
-        for(Card card : cards)
+        int leftOffset = 0;
+        for(int i = 0, len = cards.size(); i < len; i++)
         {
-            String[] cardLayout = card.getLayout();
-            for(int i = 0; i < cardLayout.length && i < cardHeight; i++)
-                layout.set(i, layout.get(i) + cardLayout[i]);
+            cards.get(i).draw(console, row, col + leftOffset);
+            leftOffset += Constants.CARD_LAYOUT_WIDTH + Constants.CARD_BORDER_WIDTH * 2;
         }
-        return layout.toArray(new String[0]);
     }
 
 
