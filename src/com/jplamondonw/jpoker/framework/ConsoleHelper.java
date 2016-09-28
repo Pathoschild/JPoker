@@ -94,9 +94,19 @@ public class ConsoleHelper
      * @throws IOException An error occurred clearing the Windows console.
      * @throws InterruptedException An error occurred clearing the Windows console.
      */
-    public void clear() throws IOException, InterruptedException
+    public void clear()
     {
         this.out.print(GO_TO_HOME + ERASE_DOWN);
+    }
+
+    /**
+     * Clear the console output from the current cursor line downward.
+     * @throws IOException An error occurred clearing the Windows console.
+     * @throws InterruptedException An error occurred clearing the Windows console.
+     */
+    public void clearFromCursorLine()
+    {
+        this.out.print(ERASE_DOWN);
     }
 
     /**

@@ -4,6 +4,9 @@ import com.jplamondonw.jpoker.framework.ConsoleHelper;
 import com.jplamondonw.jpoker.framework.Constants;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Manages an ongoing game.
@@ -42,15 +45,34 @@ public class Game
     public void run() throws IOException, InterruptedException
     {
         // start game
-        this.log.add("Starting game!");
-        this.draw();
+        this.log.add("Welcome to Texas Hold'em heads-up tournament style! We'll be");
+        this.log.add("playing with a few house rules. (If you know the standard rules,");
+        this.log.add("you'll be fine.)");
 
-        // TODO
+        // start game loop
+        while(true)
+        {
+            // confirm game start
+            this.log.add("Ready? [y]es [n]o");
+            this.draw();
+            if (this.getChoice("y", "n").equals("n"))
+            {
+                this.log.add("Good bye. :)");
+                this.draw();
+                break;
+            }
+            this.log.clear();
 
-        // end game
-        this.log.add("Enter anything to end the game.");
-        this.draw();
-        this.getInput();
+            // randomly choose dealer
+            this.board.isUserTurn = new Random().nextBoolean();
+            if(this.board.isUserTurn)
+                this.log.add("Rolling the dice... you go first!");
+            else
+                this.log.add("Rolling the dice... they go first.");
+
+            // end game
+            break;
+        }
     }
 
     // Private methods
@@ -58,7 +80,7 @@ public class Game
     /**
      * Draw the current game state.
      */
-    private void draw() throws IOException, InterruptedException
+    private void draw()
     {
         // clear screen
         this.console.clear();
@@ -77,7 +99,29 @@ public class Game
     private String getInput()
     {
         this.console.setCursor(Constants.ScreenLayout.USER_INPUT);
+        this.console.clearFromCursorLine();
         this.console.out.print("> ");
         return this.console.console.readLine();
+    }
+
+    /**
+     * Get the user's choice.
+     * @param choices The available choices. These are not case-sensitive.
+     */
+    private String getChoice(String... choices)
+    {
+        // get case-insensitive choices
+        List<String> choiceLookup = new ArrayList<>();
+        for(String choice : choices)
+            choiceLookup.add(choice.toLowerCase());
+
+        // get valid input
+        while(true)
+        {
+            // draw input
+            String choice = this.getInput().toLowerCase();
+            if(choiceLookup.contains(choice))
+                return choice;
+        }
     }
 }

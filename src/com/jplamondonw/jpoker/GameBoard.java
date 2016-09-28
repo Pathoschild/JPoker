@@ -43,6 +43,11 @@ public class GameBoard implements Drawable
      */
     public int pot;
 
+    /**
+     * Whether it's the user's turn to play.
+     */
+    public boolean isUserTurn;
+
 
     // Private properties
     //******************************

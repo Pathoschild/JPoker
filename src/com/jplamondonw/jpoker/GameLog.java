@@ -58,6 +58,8 @@ public class GameLog implements Drawable
      */
     public void add(String message)
     {
+        // TODO: ideally method should handle newlines and wrap long lines.
+
         // truncate if needed
         if(message.length() > MAX_TEXT_WIDTH)
             message = message.substring(0, MAX_TEXT_WIDTH);
@@ -68,6 +70,14 @@ public class GameLog implements Drawable
         // scroll log
         while(this.messages.size() > maxLines)
             this.messages.remove(0);
+    }
+
+    /**
+     * Clear the log.
+     */
+    public void clear()
+    {
+        this.messages.clear();
     }
 
     /**
