@@ -1,5 +1,6 @@
 package com.jplamondonw.jpoker.framework;
 
+import java.awt.Point;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -50,6 +51,16 @@ public class ConsoleHelper
      */
     private static final String GO_TO = START_TERMINAL_CODE + "[%d;%df";
 
+    /**
+     * The ANSI sequence which sets the foreground color to a dim gray.
+     */
+    public static final String SET_GRAY_COLOR = START_TERMINAL_CODE + "[1;30m"; // dim black foreground
+
+    /**
+     * The ANSI sequence which resets the foreground color to the default.
+     */
+    public static final String RESET_COLOR = START_TERMINAL_CODE + "[0m";
+
 
     // Public methods
     //******************************
@@ -94,5 +105,14 @@ public class ConsoleHelper
     public void setCursor(int row, int col)
     {
         this.out.print(String.format(GO_TO, row, col));
+    }
+
+    /**
+     * Move the cursor to the specified position.
+     * @param coordinate The coordinate (starting at (1, 1)).
+     */
+    public void setCursor(Point coordinate)
+    {
+        this.setCursor(coordinate.y, coordinate.x);
     }
 }

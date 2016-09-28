@@ -63,16 +63,18 @@ In a betting round:
      the hand.
   3. repeat steps 1–2 until both players have the same amount in the pot.
 
-### Rule references ###
-
-* http://www.pokerlistings.com/poker-rules-texas-holdem
-* http://www.pokerlistings.com/texas-holdem-betting-rules (No Limit)
-* https://www.pagat.com/poker/variants/texasholdem.html
-* https://en.wikipedia.org/wiki/Texas_hold_'em#Rules
-* http://www.wsop.com/poker-games/texas-holdem/rules/
-* http://www.izzygames.com/texas-holdem-poker-heads-up-t4278.html
-
 ## Running the game from source ##
 
 1. Compile the project into a `.jar` file.
 2. Run the compiled file with `java -jar JPoker.jar` (to play) or `java -jar JPoker.jar test` (to run console tests).
+
+### References ###
+
+* Rules
+  * _[Texas Hold'em Rules and Game Play](http://www.pokerlistings.com/poker-rules-texas-holdem)_, PokerListings
+  * _[Hold'em Betting Rules: No-Limit, Limit, Pot-Limit](http://www.pokerlistings.com/texas-holdem-betting-rules)_, PokerListings
+  * _[Texas Hold'em](https://www.pagat.com/poker/variants/texasholdem.html)_, John McLeod 
+  * _[Texas hold 'em](https://en.wikipedia.org/wiki/Texas_hold_'em#Rules)_, Wikipedia
+  * _[How To Play | Texas Holdem Rules](http://www.wsop.com/poker-games/texas-holdem/rules/)_, WSOP
+  * _[Texas Hold'em Poker Heads Up](http://www.izzygames.com/texas-holdem-poker-heads-up-t4278.html)_, IzzYgames
+* _[ANSI/VT100 Terminal Control Escape Sequences](http://www.termsys.demon.co.uk/vtansi.htm)_

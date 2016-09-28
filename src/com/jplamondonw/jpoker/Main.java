@@ -1,8 +1,8 @@
 package com.jplamondonw.jpoker;
 
 import com.jplamondonw.jpoker.framework.ConsoleHelper;
+import com.jplamondonw.jpoker.framework.Constants;
 import com.jplamondonw.jpoker.framework.Deck;
-import com.jplamondonw.jpoker.framework.Hand;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -12,6 +12,8 @@ import java.util.Arrays;
  */
 public class Main
 {
+    // Public methods
+    //******************************
     /**
      * The entry point for the poker game.
       * @param args The command-line arguments.
@@ -24,21 +26,38 @@ public class Main
         console.initialise();
         console.clear();
 
-        // run console tests
+        // start & draw game
         if(Arrays.asList(args).contains("test"))
-        {
-            // show hand test
-            {
-                console.out.println("Hand draw test");
-                console.out.println("---------------------------------");
-                Deck deck = new Deck();
-                Hand hand = new Hand();
-                hand.add(Arrays.asList(deck.drawCard(), deck.drawCard(), deck.drawCard(), deck.drawCard(), deck.drawCard()));
-                hand.draw(console, 3, 1);
-            }
+            Main.drawTestMode(console);
+        else
+            Main.startGame(console);
+    }
 
-            // end game
-            return;
-        }
+    // Private methods
+    //******************************
+    /**
+     * Start the game and draw it to the the screen.
+     * @param console The console to which to draw.
+     */
+    private static void startGame(ConsoleHelper console)
+    {
+        GameBoard board = new GameBoard();
+        board.draw(console, Constants.ScreenLayout.GAME_BOARD.y, Constants.ScreenLayout.GAME_BOARD.x);
+        console.setCursor(Constants.ScreenLayout.USER_INPUT);
+    }
+
+    /**
+     * Draw test output to the screen.
+     * @param console The console to which to draw.
+     */
+    private static void drawTestMode(ConsoleHelper console)
+    {
+        GameBoard board = new GameBoard();
+        Deck deck = board.deck;
+        board.bot.hand.add(Arrays.asList(deck.drawCard(), deck.drawCard()));
+        board.user.hand.add(Arrays.asList(deck.drawCard(), deck.drawCard()));
+        board.communityCards.add(Arrays.asList(deck.drawCard(), deck.drawCard(), deck.drawCard(), deck.drawCard(), deck.drawCard()));
+        board.draw(console, Constants.ScreenLayout.GAME_BOARD.y, Constants.ScreenLayout.GAME_BOARD.x);
+        console.setCursor(Constants.ScreenLayout.USER_INPUT);
     }
 }
