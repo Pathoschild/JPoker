@@ -39,14 +39,9 @@ public class GameBoard implements Drawable
     public int bigBlind = Constants.INITIAL_BIG_BLIND;
 
     /**
-     * The chips that have been bet so far.
+     * The current big blind (minimum bet).
      */
-    public int pot;
-
-    /**
-     * Whether it's the user's turn to play.
-     */
-    public boolean isUserTurn;
+    public int smallBlind = Constants.INITIAL_BIG_BLIND / 2;
 
 
     // Private properties
@@ -138,7 +133,7 @@ public class GameBoard implements Drawable
 
         // get text to display
         List<String> lines = Arrays.asList(
-                "   Pot: $" + this.pot,
+                "   Pot: $" + (this.user.bet + this.bot.bet),
                 "Blinds: $" + (this.bigBlind / 2) + " – $" + this.bigBlind,
                 " Your chips: $" + this.user.chips,
                 "Their chips: $" + this.bot.chips

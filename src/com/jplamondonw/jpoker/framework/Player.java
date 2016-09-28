@@ -48,4 +48,19 @@ public class Player
         this.name = name;
         this.chips = chips;
     }
+
+    /**
+     * Bet the specified amount if possible.
+     * @param amount The amount to bet.
+     * @return Returns whether the player can place that bet.
+     */
+    public boolean bet(int amount)
+    {
+        if(this.chips < amount)
+            return false;
+
+        this.chips -= amount;
+        this.bet += amount;
+        return true;
+    }
 }
