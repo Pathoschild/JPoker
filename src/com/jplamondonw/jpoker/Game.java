@@ -96,9 +96,53 @@ public class Game
             user.hand.add(Arrays.asList(deck.drawCard(), deck.drawCard()));
             bot.hand.add(Arrays.asList(deck.drawCard(), deck.drawCard()));
             this.draw();
+            Player winner = null;
 
-            // preflop phase
-            this.runBettingRound(board, this.board.bigBlind);
+            // the preflop
+            winner = this.runBettingRound(board, this.board.bigBlind);
+            this.draw();
+
+            // the flop
+            if(winner == null)
+            {
+                this.log.add("The flop!");
+                this.board.communityCards.add(Arrays.asList(deck.drawCard(), deck.drawCard(), deck.drawCard()));
+                winner = this.runBettingRound(board, this.board.bigBlind);
+            }
+
+            // the turn
+            if(winner == null)
+            {
+                this.log.add("The turn!");
+                this.board.communityCards.add(deck.drawCard());
+                winner = this.runBettingRound(board, this.board.bigBlind);
+            }
+
+            // the river
+            if(winner == null)
+            {
+                this.log.add("The river!");
+                this.board.communityCards.add(deck.drawCard());
+                winner = this.runBettingRound(board, this.board.bigBlind);
+            }
+
+            // handle winner
+            int pot = user.bet + bot.bet;
+            if(winner != null)
+            {
+                if(winner == user)
+                    this.log.add("You won! You get $" + pot + ".");
+                else
+                    this.log.add("You lost! They get $" + pot + ".");
+                winner.chips += pot;
+            }
+            else
+            {
+                int winnings = pot / 2;
+                this.log.add("Looks like a tie; you each get $" + winnings + ".");
+                user.chips += winnings;
+                bot.chips += winnings;
+            }
             this.draw();
 
             // end game
@@ -114,8 +158,9 @@ public class Game
      * Run a round of betting.
      * @param board The game board.
      * @param minBet The minimum bet.
+     * @return Returns the round winner (if a player won).
      */
-    private void runBettingRound(GameBoard board, int minBet)
+    private Player runBettingRound(GameBoard board, int minBet)
     {
         Player user = board.user;
         Player bot = board.bot;
@@ -183,7 +228,7 @@ public class Game
                     // ends betting round
                     case "f":
                         this.log.add("You folded.");
-                        return;
+                        return bot;
 
                     // call/check
                     case "c":
@@ -250,9 +295,12 @@ public class Game
                 botCanBet = this.runBotBet(bot, user, minBet);
 
             // check round end condition
+            if(!botCanBet && bot.bet < user.bet)
+                return user;
             if(user.bet == bot.bet)
-                break;
+                return null;
         }
+        return null;
     }
 
     /**
