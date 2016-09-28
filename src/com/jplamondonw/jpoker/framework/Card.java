@@ -17,10 +17,14 @@ public class Card implements Drawable
      */
     public final Suit suit;
 
+    /**
+     * Whether the card should be drawn face-down.
+     */
+    public final boolean isFaceDown;
+
 
     // Public methods
     //******************************
-
     /**
      * Construct an instance.
      * @param suit The card suit.
@@ -28,8 +32,20 @@ public class Card implements Drawable
      */
     public Card(Suit suit, Rank rank)
     {
+        this(suit, rank, false);
+    }
+
+    /**
+     * Construct an instance.
+     * @param suit The card suit.
+     * @param rank The card rank.
+     * @param isFaceDown Whether the card should be drawn face-down.
+     */
+    public Card(Suit suit, Rank rank, boolean isFaceDown)
+    {
         this.suit = suit;
         this.rank = rank;
+        this.isFaceDown = isFaceDown;
     }
 
     /**
@@ -40,13 +56,40 @@ public class Card implements Drawable
      */
     public void draw(ConsoleHelper console, int row, int col)
     {
-        String layout = "┌───────┐\n│ " + this.rank.layout.replace("%", this.suit.symbol).replace("\n", " │\n│ ") + " │\n└───────┘";
-        String[] lines = layout.split("\n");
+        // top border
+        console.setCursor(row, col);
+        console.out.print("┌─");
+        for(int i = 0; i < Constants.CARD_LAYOUT_WIDTH; i++)
+            console.out.print("─");
+        console.out.print("─┐");
 
-        for(int i = 0; i < lines.length; i++)
+        // card layout
+        if(this.isFaceDown)
         {
-            console.setCursor(row + i, col);
-            console.out.print(lines[i]);
+            for(int layoutRow = 0; layoutRow < Constants.CARD_LAYOUT_HEIGHT; layoutRow++)
+            {
+                console.setCursor(row + 1 + layoutRow, col);
+                console.out.print("│ ");
+                for(int layoutCol = 0; layoutCol < Constants.CARD_LAYOUT_WIDTH; layoutCol++)
+                    console.out.print("▒");
+                console.out.print(" │");
+            }
         }
+        else
+        {
+            String layout = "│ " + this.rank.layout.replace("%", this.suit.symbol).replace("\n", " │\n│ ") + " │";
+            String[] lines = layout.split("\n");
+            for (int i = 0; i < lines.length; i++) {
+                console.setCursor(row + i + 1, col);
+                console.out.print(lines[i]);
+            }
+        }
+
+        // bottom border
+        console.setCursor(row + Constants.CARD_LAYOUT_HEIGHT + 1, col);
+        console.out.print("└─");
+        for(int i = 0; i < Constants.CARD_LAYOUT_WIDTH; i++)
+            console.out.print("─");
+        console.out.print("─┘");
     }
 }

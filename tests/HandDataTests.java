@@ -17,11 +17,11 @@ public class HandDataTests {
     {
         // analyse sample cards
         HandData data = new HandData(new Card[] {
-                new Card(Suit.HEARTS, Rank.A),
-                new Card(Suit.CLUBS, Rank.JACK),
-                new Card(Suit.CLUBS, Rank.JACK),
-                new Card(Suit.CLUBS, Rank.A),
-                new Card(Suit.HEARTS, Rank.EIGHT)
+            new Card(Suit.HEARTS, Rank.A),
+            new Card(Suit.CLUBS, Rank.JACK),
+            new Card(Suit.CLUBS, Rank.JACK),
+            new Card(Suit.CLUBS, Rank.A),
+            new Card(Suit.HEARTS, Rank.EIGHT)
         });
 
         // assert data

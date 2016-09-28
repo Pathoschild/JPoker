@@ -98,7 +98,7 @@ public class GameBoard implements Drawable
 
         // draw bot hand
         Point handPosAbs = this.getRelativePoint(origin, handPos);
-        this.bot.hand.draw(console, handPosAbs.y, handPosAbs.x);
+        player.hand.draw(console, handPosAbs.y, handPosAbs.x);
     }
 
     /**

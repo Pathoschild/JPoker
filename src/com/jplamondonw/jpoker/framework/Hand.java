@@ -10,7 +10,15 @@ import java.util.List;
  */
 public class Hand implements Drawable
 {
-    // Properties
+    // Public properties
+    //******************************
+    /**
+     * Whether the hand's cards should be drawn face-down.
+     */
+    public final boolean isFaceDown;
+
+
+    // Private Properties
     //******************************
     /**
      * The cards in the hand.
@@ -26,12 +34,29 @@ public class Hand implements Drawable
     // Public methods
     //******************************
     /**
+     * Construct an instance.
+     */
+    public Hand()
+    {
+        this(false);
+    }
+
+    /**
+     * Construct an instance.
+     * @param isFaceDown Whether the hand's cards should be drawn face-down.
+     */
+    public Hand(boolean isFaceDown)
+    {
+        this.isFaceDown = isFaceDown;
+    }
+
+    /**
      * Add a card to the player's hand.
      * @param card The card to add.
      */
     public void add(Card card)
     {
-        this.cards.add(card);
+        this.cards.add(new Card(card.suit, card.rank, this.isFaceDown));
         this.sort();
         this.data = null;
     }
@@ -42,7 +67,8 @@ public class Hand implements Drawable
      */
     public void add(List<Card> cards)
     {
-        this.cards.addAll(cards);
+        for(Card card : cards)
+            this.cards.add(new Card(card.suit, card.rank, this.isFaceDown));
         this.sort();
         this.data = null;
     }
@@ -61,7 +87,7 @@ public class Hand implements Drawable
      */
     public Hand getFullHand(List<Card> communityCards)
     {
-        Hand hand = new Hand();
+        Hand hand = new Hand(this.isFaceDown);
         hand.add(this.cards);
         hand.add(communityCards);
         return hand;

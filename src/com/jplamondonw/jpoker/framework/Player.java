@@ -20,7 +20,7 @@ public class Player
     /**
      * The player's hand of cards.
      */
-    public final Hand hand = new Hand();
+    public final Hand hand;
 
     /**
      * The number of chips in the player's bank.
@@ -44,6 +44,7 @@ public class Player
     public Player(boolean isUser, String name, int chips)
     {
         this.isUser = isUser;
+        this.hand = new Hand(!isUser);
         this.name = name;
         this.chips = chips;
     }
