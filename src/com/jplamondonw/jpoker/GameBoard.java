@@ -16,12 +16,12 @@ public class GameBoard implements Drawable
     /**
      * The bot player.
      */
-    public final Player bot = new Player(false, "They", Constants.INITIAL_CHIPS);
+    public final Player bot;
 
     /**
-     * The user player.
+     * The human player.
      */
-    public final Player user = new Player(true, "You", Constants.INITIAL_CHIPS);
+    public final Player human;
 
     /**
      * The deck of cards available to draw.
@@ -43,6 +43,11 @@ public class GameBoard implements Drawable
      */
     public int smallBlind = Constants.INITIAL_BIG_BLIND / 2;
 
+    /**
+     * Whether the player has started this hand.
+     */
+    public final boolean isStarted;
+
 
     // Private properties
     //******************************
@@ -55,6 +60,19 @@ public class GameBoard implements Drawable
     // Public methods
     //******************************
     /**
+     * Construct an instance.
+     * @param bot The bot player.
+     * @param user The human player.
+     * @param isStarted Whether the game has started.
+     */
+    public GameBoard(Player bot, Player user, boolean isStarted)
+    {
+        this.bot = bot;
+        this.human = user;
+        this.isStarted = isStarted;
+    }
+
+    /**
      * Draw the element at the specified position.
      * @param console The console to which to draw.
      * @param row The top row position.
@@ -66,7 +84,7 @@ public class GameBoard implements Drawable
 
         // draw players
         this.drawPlayer(console, this.bot, origin, Constants.BoardLayout.BOT_NAME_AND_BET, Constants.BoardLayout.BOT_HAND);
-        this.drawPlayer(console, this.user, origin, Constants.BoardLayout.USER_NAME_AND_BET, Constants.BoardLayout.USER_HAND);
+        this.drawPlayer(console, this.human, origin, Constants.BoardLayout.USER_NAME_AND_BET, Constants.BoardLayout.USER_HAND);
 
         // draw pile
         {
@@ -112,6 +130,9 @@ public class GameBoard implements Drawable
      */
     private void drawPlayer(ConsoleHelper console, Player player, Point origin, Point nameAndBetPos, Point handPos)
     {
+        if(!this.isStarted)
+            return;
+
         // draw bot name + bet
         console.setCursor(this.getRelativePoint(origin, nameAndBetPos));
         console.out.print(player.name + " bet $" + player.bet);
@@ -133,9 +154,9 @@ public class GameBoard implements Drawable
 
         // get text to display
         List<String> lines = Arrays.asList(
-                "   Pot: $" + (this.user.bet + this.bot.bet),
+                "   Pot: $" + (this.human.bet + this.bot.bet),
                 "Blinds: $" + (this.bigBlind / 2) + " – $" + this.bigBlind,
-                " Your chips: $" + this.user.chips,
+                " Your chips: $" + this.human.chips,
                 "Their chips: $" + this.bot.chips
         );
         int innerBorderAt = 3;

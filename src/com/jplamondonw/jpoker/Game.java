@@ -20,28 +20,12 @@ public class Game
      */
     private final ConsoleHelper console;
 
-    /**
-     * The underlying game board.
-     */
-    private final GameBoard board = new GameBoard();
-
-    /**
-     * The game log shown to the user.
-     */
-    private final GameLog log = new GameLog(5);
-
-    /**
-     * Whether the user has the dealer coin.
-     */
-    public boolean isUserDealer;
-
 
     // Public methods
     //******************************
     public Game(ConsoleHelper console)
     {
         this.console = console;
-        this.board.draw(console, Constants.ScreenLayout.GAME_BOARD.y, Constants.ScreenLayout.GAME_BOARD.x);
     }
 
     /**
@@ -49,12 +33,12 @@ public class Game
      */
     public void run() throws IOException, InterruptedException
     {
-        // get references for simplicity
-        GameLog log = this.log;
-        GameBoard board = this.board;
-        Deck deck = this.board.deck;
-        Player user = this.board.user;
-        Player bot = this.board.bot;
+        // initialise
+        Player bot = new Player(false, "They", Constants.INITIAL_CHIPS);
+        Player human = new Player(true, "You", Constants.INITIAL_CHIPS);
+        GameLog log = new GameLog(5);
+        GameBoard board = new GameBoard(bot, human, false);
+        boolean isHumanDealer = new Random().nextBoolean();
 
         // start game
         log.add("Welcome to Texas Hold'em heads-up tournament style! We'll be");
@@ -65,63 +49,70 @@ public class Game
         while(true)
         {
             // confirm game start
-            log.add("Ready? (y)es (n)o");
-            this.draw();
+            log.add("Play a new hand? (y)es (n)o");
+            this.draw(board, log);
             if (this.getChoice("y", "n").equals("n"))
             {
                 log.add("Good bye. :)");
-                this.draw();
+                this.draw(board, log);
                 break;
             }
             log.clear();
 
-            // report initial state
-            log.add("You each have $" + user.chips + " in chips. We'll start the big blind at $" + this.board.bigBlind + ".");
+            // initial state
+            bot.hand.clear();
+            human.hand.clear();
+            board = new GameBoard(bot, human, true);
+            Deck deck = board.deck;
+            log.add("You have $" + human.chips + " in chips. We'll start the big blind at $" + board.bigBlind + ".");
 
-            // randomly choose dealer
-            this.isUserDealer = new Random().nextBoolean();
-            if(this.isUserDealer)
-                log.add("Rolling the dice... you have the dealer coin!");
+            // alternate dealer
+            isHumanDealer = !isHumanDealer;
+            Player dealer = isHumanDealer ? human : bot;
+            Player nonDealer = isHumanDealer ? bot : human;
+            if(isHumanDealer)
+                log.add("You have the dealer coin!");
             else
-                log.add("Rolling the dice... they have the dealer coin.");
-            this.draw();
+                log.add("They have the dealer coin.");
+            this.draw(board, log);
 
             // place initial bets & distribute cards
             log.add("Placing initial bets.");
             log.add("Dealing hole cards.");
-            this.getDealer().bet(board.smallBlind);
-            this.getOther().bet(board.bigBlind);
-            user.hand.add(Arrays.asList(deck.drawCard(), deck.drawCard()));
+
+            dealer.bet(board.smallBlind);
+            nonDealer.bet(board.bigBlind);
+            human.hand.add(Arrays.asList(deck.drawCard(), deck.drawCard()));
             bot.hand.add(Arrays.asList(deck.drawCard(), deck.drawCard()));
-            this.draw();
+            this.draw(board, log);
             Player winner = null;
 
             // the preflop
-            winner = this.runBettingRound(board, this.board.bigBlind);
-            this.draw();
+            winner = this.runBettingRound(board, log, board.bigBlind, dealer);
+            this.draw(board, log);
 
             // the flop
             if(winner == null)
             {
                 log.add("The flop!");
-                this.board.communityCards.add(Arrays.asList(deck.drawCard(), deck.drawCard(), deck.drawCard()));
-                winner = this.runBettingRound(board, this.board.bigBlind);
+                board.communityCards.add(Arrays.asList(deck.drawCard(), deck.drawCard(), deck.drawCard()));
+                winner = this.runBettingRound(board, log, board.bigBlind, dealer);
             }
 
             // the turn
             if(winner == null)
             {
                 log.add("The turn!");
-                this.board.communityCards.add(deck.drawCard());
-                winner = this.runBettingRound(board, this.board.bigBlind);
+                board.communityCards.add(deck.drawCard());
+                winner = this.runBettingRound(board, log, board.bigBlind, dealer);
             }
 
             // the river
             if(winner == null)
             {
                 log.add("The river!");
-                this.board.communityCards.add(deck.drawCard());
-                winner = this.runBettingRound(board, this.board.bigBlind);
+                board.communityCards.add(deck.drawCard());
+                winner = this.runBettingRound(board, log, board.bigBlind, dealer);
             }
 
             // showdown
@@ -129,7 +120,7 @@ public class Game
             {
                 log.add("Showdown!");
                 HandType botHandType = bot.hand.getHandType();
-                HandType userHandType = user.hand.getHandType();
+                HandType userHandType = human.hand.getHandType();
 
                 // winning hand type
                 if(botHandType.value != userHandType.value)
@@ -142,7 +133,7 @@ public class Game
                     else
                     {
                         log.add("You have a " + userHandType.name + "!");
-                        winner = user;
+                        winner = human;
                     }
                 }
 
@@ -150,7 +141,7 @@ public class Game
                 else
                 {
                     int botHandValue = bot.hand.getTotalFaceValue();
-                    int userHandValue = bot.hand.getTotalFaceValue();
+                    int userHandValue = human.hand.getTotalFaceValue();
                     if(botHandValue > userHandValue)
                     {
                         log.add("They have the highest combined face value.");
@@ -159,7 +150,7 @@ public class Game
                     else if(userHandValue > botHandValue)
                     {
                         log.add("You have the highest combined face value.");
-                        winner = user;
+                        winner = human;
                     }
                 }
             }
@@ -167,10 +158,10 @@ public class Game
             // handle winner
             bot.showHand();
 
-            int pot = user.bet + bot.bet;
+            int pot = human.bet + bot.bet;
             if(winner != null)
             {
-                if(winner == user)
+                if(winner == human)
                     log.add("You won! You get $" + pot + ".");
                 else
                     log.add("You lost! They get $" + pot + ".");
@@ -180,13 +171,10 @@ public class Game
             {
                 int winnings = pot / 2;
                 log.add("Looks like a tie; you each get $" + winnings + ".");
-                user.chips += winnings;
+                human.chips += winnings;
                 bot.chips += winnings;
             }
-            this.draw();
-
-            // end game
-            break;
+            this.draw(board, log);
         }
     }
 
@@ -197,28 +185,30 @@ public class Game
     /**
      * Run a round of betting.
      * @param board The game board.
+     * @param log The game log.
      * @param minBet The minimum bet.
+     * @param dealer The player with the dealer coin.
      * @return Returns the round winner (if a player won).
      */
-    private Player runBettingRound(GameBoard board, int minBet)
+    private Player runBettingRound(GameBoard board, GameLog log, int minBet, Player dealer)
     {
-        Player user = board.user;
+        Player human = board.human;
         Player bot = board.bot;
 
         boolean botCanBet = true;
-        boolean userCanBet = true;
-        while(botCanBet && userCanBet)
+        boolean humanCanBet = true;
+        while(botCanBet && humanCanBet)
         {
             // run bot action (if first)
-            if(!this.isUserDealer)
-                botCanBet = this.runBotBet(bot, user, minBet);
+            if(bot == dealer)
+                botCanBet = this.runBotBet(bot, human, minBet, log);
 
             // calculate minimum player bet
-            int minPlayerBet = minBet - (user.bet % minBet);
-            if(user.chips < minPlayerBet)
+            int minPlayerBet = minBet - (human.bet % minBet);
+            if(human.chips < minPlayerBet)
             {
-                this.log.add("You don't have enough chips to bet.");
-                userCanBet = false;
+                log.add("You don't have enough chips to bet.");
+                humanCanBet = false;
             }
             else
             {
@@ -233,7 +223,7 @@ public class Game
                     choices.add("f");
 
                     // call (or check)
-                    if(bot.bet > user.bet)
+                    if(bot.bet > human.bet)
                     {
                         labels.add("(c)all");
                         choices.add("c");
@@ -245,7 +235,7 @@ public class Game
                     }
 
                     // raise (or bet)
-                    if((bot.bet + user.bet) > 0)
+                    if((bot.bet + human.bet) > 0)
                     {
                         labels.add("(r)aise");
                         choices.add("r");
@@ -261,57 +251,57 @@ public class Game
                 }
 
                 // perform player action
-                this.log.add(question);
-                this.draw();
+                log.add(question);
+                this.draw(board, log);
                 switch(this.getChoice(choices.toArray(new String[0])))
                 {
                     // fold
                     // ends betting round
                     case "f":
-                        this.log.add("You folded.");
+                        log.add("You folded.");
                         return bot;
 
                     // call/check
                     case "c":
                         // call
-                        if(bot.bet > user.bet)
+                        if(bot.bet > human.bet)
                         {
-                            int bet = bot.bet - user.bet;
-                            user.bet(bet);
-                            this.log.add("You called for $" + bet + ".");
+                            int bet = bot.bet - human.bet;
+                            human.bet(bet);
+                            log.add("You called for $" + bet + ".");
                         }
 
                         // check
                         else
-                            this.log.add("You checked.");
+                            log.add("You checked.");
                         break;
 
                     // raise/bet
                     case "b":
                     case "r":
-                        String verb = (bot.bet + user.bet) > 0 ? "raise" : "bet";
+                        String verb = (bot.bet + human.bet) > 0 ? "raise" : "bet";
 
                         // get raise amount
                         int bet;
-                        this.log.add("How much do you want to " + verb + "?");
+                        log.add("How much do you want to " + verb + "?");
                         while(true)
                         {
-                            this.draw();
+                            this.draw(board, log);
 
                             // get amount
                             String input = this.getInput();
                             if(!input.chars().allMatch(Character::isDigit))
                             {
-                                this.log.add("Please enter a numeric " + verb + ".");
+                                log.add("Please enter a numeric " + verb + ".");
                                 continue;
                             }
                             bet = Integer.parseInt(input);
 
                             // validate
                             if(bet < minPlayerBet)
-                                this.log.add("The minimum " + verb + " is $" + minBet + ".");
-                            else if(bet > user.chips)
-                                this.log.add("You don't have that many chips to " + verb + ".");
+                                log.add("The minimum " + verb + " is $" + minBet + ".");
+                            else if(bet > human.chips)
+                                log.add("You don't have that many chips to " + verb + ".");
                             else
                                 break;
                         }
@@ -320,25 +310,25 @@ public class Game
                         bet -= bet % minBet;
 
                         // place bet
-                        this.log.add("You bet $" + bet + ".");
-                        user.bet(bet);
+                        log.add("You bet $" + bet + ".");
+                        human.bet(bet);
                         break;
 
                     // shouldn't happen
                     default:
-                        this.log.add("Uh oh. That choice isn't valid. Let's pretend that didn't happen.");
+                        log.add("Uh oh. That choice isn't valid. Let's pretend that didn't happen.");
                         break;
                 }
             }
 
             // let bot bet if they're second
-            if(this.isUserDealer)
-                botCanBet = this.runBotBet(bot, user, minBet);
+            if(human == dealer)
+                botCanBet = this.runBotBet(bot, human, minBet, log);
 
             // check round end condition
-            if(!botCanBet && bot.bet < user.bet)
-                return user;
-            if(user.bet == bot.bet)
+            if(!botCanBet && bot.bet < human.bet)
+                return human;
+            if(human.bet == bot.bet)
                 return null;
         }
         return null;
@@ -349,8 +339,9 @@ public class Game
      * @param bot The bot player.
      * @param user The human player.
      * @param minBet The minimum bet.
+     * @param log The game log.
      */
-    private boolean runBotBet(Player bot, Player user, int minBet)
+    private boolean runBotBet(Player bot, Player user, int minBet, GameLog log)
     {
         // get minimum bet allowed
         int bet = Math.max(Math.max(user.bet - bot.bet, bot.bet - minBet), 0);
@@ -358,59 +349,36 @@ public class Game
         // place bet
         if(bet == 0)
         {
-            this.log.add("They called.");
+            log.add("They called.");
             return true;
         }
         if(bot.bet(bet))
         {
-            this.log.add("They bet $" + bet + ".");
+            log.add("They bet $" + bet + ".");
             return true;
         }
         else
         {
-            this.log.add("They don't have enough chips to bet.");
+            log.add("They don't have enough chips to bet.");
             return false;
         }
-    }
-
-    /**
-     * Get the player who has the dealer coin.
-     */
-    private Player getDealer()
-    {
-        return this.isUserDealer ? this.board.user : this.board.bot;
-    }
-
-    /**
-     * Get the non-dealer player.
-     */
-    private Player getOther()
-    {
-        return this.isUserDealer ? this.board.bot : this.board.user;
-    }
-
-    /**
-     * Get the other player.
-     * @param player The player to ignore.
-     */
-    private Player getOther(Player player)
-    {
-        return player == this.board.user ? this.board.bot : this.board.user;
     }
 
     // Drawing & UI
     //**************
     /**
      * Draw the current game state.
+     * @param board The game board to draw.
+     * @param log The game log.
      */
-    private void draw()
+    private void draw(GameBoard board, GameLog log)
     {
         // clear screen
         this.console.clear();
 
         // draw elements
-        this.board.draw(console, Constants.ScreenLayout.GAME_BOARD.y, Constants.ScreenLayout.GAME_BOARD.x);
-        this.log.draw(console, Constants.ScreenLayout.GAME_LOG.y, Constants.ScreenLayout.GAME_LOG.x);
+        board.draw(console, Constants.ScreenLayout.GAME_BOARD.y, Constants.ScreenLayout.GAME_BOARD.x);
+        log.draw(console, Constants.ScreenLayout.GAME_LOG.y, Constants.ScreenLayout.GAME_LOG.x);
 
         // move cursor out of the way
         this.console.setCursor(Constants.ScreenLayout.USER_INPUT);

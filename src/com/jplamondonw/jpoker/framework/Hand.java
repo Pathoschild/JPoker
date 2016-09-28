@@ -147,6 +147,14 @@ public class Hand implements Drawable
     }
 
     /**
+     * Remove all cards from the hand.
+     */
+    public void clear()
+    {
+        this.cards.clear();
+    }
+
+    /**
      * Draw the element at the specified position.
      * @param console The console to which to draw.
      * @param row The top row position.
