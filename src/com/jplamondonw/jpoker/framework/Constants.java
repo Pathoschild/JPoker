@@ -47,11 +47,20 @@ public class Constants
          */
         public static final Point GAME_BOARD = new Point(1, 1);
 
+        /**
+         * The position at which messages to the user should be drawn.
+         */
+        public static final Point GAME_LOG = new Point(5, 36);
 
         /**
-         * The position at which messages to the user and their input should be drawn.
+         * The maximum width of the game log.
          */
-        public static final Point USER_INPUT = new Point(5, 37);
+        public static final int GAME_LOG_WIDTH = 70;
+
+        /**
+         * The position at which messages the user's input should be drawn.
+         */
+        public static final Point USER_INPUT = new Point(5, 43);
     }
 
 

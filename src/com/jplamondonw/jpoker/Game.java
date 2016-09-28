@@ -3,6 +3,8 @@ package com.jplamondonw.jpoker;
 import com.jplamondonw.jpoker.framework.ConsoleHelper;
 import com.jplamondonw.jpoker.framework.Constants;
 
+import java.io.IOException;
+
 /**
  * Manages an ongoing game.
  */
@@ -15,11 +17,15 @@ public class Game
      */
     private final ConsoleHelper console;
 
-
     /**
      * The underlying game board.
      */
     private final GameBoard board = new GameBoard();
+
+    /**
+     * The game log shown to the user.
+     */
+    private final GameLog log = new GameLog(5);
 
 
     // Public methods
@@ -33,23 +39,45 @@ public class Game
     /**
      * Run the game until it completes.
      */
-    public void run()
+    public void run() throws IOException, InterruptedException
     {
-        board.draw(console, Constants.ScreenLayout.GAME_BOARD.y, Constants.ScreenLayout.GAME_BOARD.x);
-        this.getInput("Enter anything to end the game.");
+        // start game
+        this.log.add("Starting game!");
+        this.draw();
+
+        // TODO
+
+        // end game
+        this.log.add("Enter anything to end the game.");
+        this.draw();
+        this.getInput();
     }
 
     // Private methods
     //******************************
     /**
-     * Get input from the user.
-     * @param question The question to print.
+     * Draw the current game state.
      */
-    private String getInput(String question)
+    private void draw() throws IOException, InterruptedException
+    {
+        // clear screen
+        this.console.clear();
+
+        // draw elements
+        this.board.draw(console, Constants.ScreenLayout.GAME_BOARD.y, Constants.ScreenLayout.GAME_BOARD.x);
+        this.log.draw(console, Constants.ScreenLayout.GAME_LOG.y, Constants.ScreenLayout.GAME_LOG.x);
+
+        // move cursor out of the way
+        this.console.setCursor(Constants.ScreenLayout.USER_INPUT);
+    }
+
+    /**
+     * Get input from the user.
+     */
+    private String getInput()
     {
         this.console.setCursor(Constants.ScreenLayout.USER_INPUT);
-        this.console.out.println(question);
-        this.console.setCursor(Constants.ScreenLayout.USER_INPUT.y + 1, Constants.ScreenLayout.USER_INPUT.x);
+        this.console.out.print("> ");
         return this.console.console.readLine();
     }
 }
