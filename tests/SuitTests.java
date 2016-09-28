@@ -1,4 +1,4 @@
-import com.jplamondonw.jpoker.models.Suit;
+import com.jplamondonw.jpoker.framework.Suit;
 import org.junit.Assert;
 import org.junit.Test;
 

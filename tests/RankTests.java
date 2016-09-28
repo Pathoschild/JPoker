@@ -1,5 +1,5 @@
-import com.jplamondonw.jpoker.models.Constants;
-import com.jplamondonw.jpoker.models.Rank;
+import com.jplamondonw.jpoker.framework.Constants;
+import com.jplamondonw.jpoker.framework.Rank;
 import org.junit.Assert;
 import org.junit.Test;
 

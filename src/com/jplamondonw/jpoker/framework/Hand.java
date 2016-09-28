@@ -1,6 +1,9 @@
-package com.jplamondonw.jpoker.models;
+package com.jplamondonw.jpoker.framework;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * A player's hand of cards.

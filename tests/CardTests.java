@@ -1,6 +1,6 @@
-import com.jplamondonw.jpoker.models.Card;
-import com.jplamondonw.jpoker.models.Rank;
-import com.jplamondonw.jpoker.models.Suit;
+import com.jplamondonw.jpoker.framework.Card;
+import com.jplamondonw.jpoker.framework.Rank;
+import com.jplamondonw.jpoker.framework.Suit;
 import org.junit.Assert;
 import org.junit.Test;
 

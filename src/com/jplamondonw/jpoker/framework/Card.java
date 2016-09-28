@@ -1,4 +1,4 @@
-package com.jplamondonw.jpoker.models;
+package com.jplamondonw.jpoker.framework;
 
 /**
  * The display and game logic for a card.

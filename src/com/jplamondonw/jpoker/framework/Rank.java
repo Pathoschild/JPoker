@@ -1,4 +1,4 @@
-package com.jplamondonw.jpoker.models;
+package com.jplamondonw.jpoker.framework;
 
 /**
  * The possible card ranks.

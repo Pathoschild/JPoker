@@ -1,8 +1,9 @@
 package com.jplamondonw.jpoker;
 
-import com.jplamondonw.jpoker.models.Card;
-import com.jplamondonw.jpoker.models.Deck;
-import com.jplamondonw.jpoker.models.Hand;
+import com.jplamondonw.jpoker.framework.Card;
+import com.jplamondonw.jpoker.framework.ConsoleHelper;
+import com.jplamondonw.jpoker.framework.Deck;
+import com.jplamondonw.jpoker.framework.Hand;
 
 import java.io.IOException;
 import java.util.Arrays;

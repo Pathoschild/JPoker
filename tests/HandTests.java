@@ -1,4 +1,4 @@
-import com.jplamondonw.jpoker.models.*;
+import com.jplamondonw.jpoker.framework.*;
 import org.junit.Assert;
 import org.junit.Test;
 

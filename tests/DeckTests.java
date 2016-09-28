@@ -1,7 +1,7 @@
-import com.jplamondonw.jpoker.models.Card;
-import com.jplamondonw.jpoker.models.Deck;
-import com.jplamondonw.jpoker.models.Rank;
-import com.jplamondonw.jpoker.models.Suit;
+import com.jplamondonw.jpoker.framework.Card;
+import com.jplamondonw.jpoker.framework.Deck;
+import com.jplamondonw.jpoker.framework.Rank;
+import com.jplamondonw.jpoker.framework.Suit;
 import org.hamcrest.core.IsEqual;
 import org.hamcrest.core.IsNot;
 import org.junit.Assert;

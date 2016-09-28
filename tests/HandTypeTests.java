@@ -1,4 +1,4 @@
-import com.jplamondonw.jpoker.models.HandType;
+import com.jplamondonw.jpoker.framework.HandType;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.jplamondonw.jpoker;
+package com.jplamondonw.jpoker.framework;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,7 +8,7 @@ import java.io.UnsupportedEncodingException;
 /**
  * A minimal class for interacting with the game console.
  */
-class ConsoleHelper {
+public class ConsoleHelper {
     // Properties
     //******************************
     /**
