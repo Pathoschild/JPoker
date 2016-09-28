@@ -8,15 +8,15 @@ import java.io.IOException;
 import java.util.Arrays;
 
 /**
- * The entry point for the poker game.
+ * The entry point for the game.
  */
 public class Main
 {
     // Public methods
     //******************************
     /**
-     * The entry point for the poker game.
-      * @param args The command-line arguments.
+     * The entry point for the game, which displays the test output or launches the game depending on the input arguments.
+     * @param args The command-line arguments.
      * @throws IOException An error occurred interacting with the Windows console.
      * @throws InterruptedException An error occurred interacting with the Windows console.
      */
@@ -30,22 +30,11 @@ public class Main
         if(Arrays.asList(args).contains("test"))
             Main.drawTestMode(console);
         else
-            Main.startGame(console);
+            new Game(console).run();
     }
 
     // Private methods
     //******************************
-    /**
-     * Start the game and draw it to the the screen.
-     * @param console The console to which to draw.
-     */
-    private static void startGame(ConsoleHelper console)
-    {
-        GameBoard board = new GameBoard();
-        board.draw(console, Constants.ScreenLayout.GAME_BOARD.y, Constants.ScreenLayout.GAME_BOARD.x);
-        console.setCursor(Constants.ScreenLayout.USER_INPUT);
-    }
-
     /**
      * Draw test output to the screen.
      * @param console The console to which to draw.

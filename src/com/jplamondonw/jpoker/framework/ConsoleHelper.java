@@ -1,10 +1,7 @@
 package com.jplamondonw.jpoker.framework;
 
 import java.awt.Point;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 
 /**
  * A minimal class for interacting with the game console.
@@ -13,6 +10,11 @@ public class ConsoleHelper
 {
     // Public properties
     //******************************
+    /**
+     * The underlying console.
+     */
+    public final Console console = System.console();
+
     /**
      * The console input stream.
      */
