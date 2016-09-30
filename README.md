@@ -1,6 +1,8 @@
 **JPoker** is a simple implementation of Texas Hold 'em (head-to-head no-limit tournament style) to
 learn cards and Java.
 
+![](screenshot.png)
+
 ## Implementation ##
 Since I'm not a card player and the goal of this project isn't to gain a deep understanding of the
 game, I'll use these approximations of the standard rules. Any deviations are hereby declared house
@@ -74,7 +76,7 @@ In a betting round:
   * _[Texas Hold'em Rules and Game Play](http://www.pokerlistings.com/poker-rules-texas-holdem)_, PokerListings
   * _[Hold'em Betting Rules: No-Limit, Limit, Pot-Limit](http://www.pokerlistings.com/texas-holdem-betting-rules)_, PokerListings
   * _[Texas Hold'em](https://www.pagat.com/poker/variants/texasholdem.html)_, John McLeod 
-  * _[Texas hold 'em](https://en.wikipedia.org/wiki/Texas_hold_'em#Rules)_, Wikipedia
+  * _[Texas hold 'em](https://en.wikipedia.org/wiki/Texas%5Fhold%5F%27em#Rules)_, Wikipedia
   * _[How To Play | Texas Holdem Rules](http://www.wsop.com/poker-games/texas-holdem/rules/)_, WSOP
   * _[Texas Hold'em Poker Heads Up](http://www.izzygames.com/texas-holdem-poker-heads-up-t4278.html)_, IzzYgames
 * _[ANSI/VT100 Terminal Control Escape Sequences](http://www.termsys.demon.co.uk/vtansi.htm)_
